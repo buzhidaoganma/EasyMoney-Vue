@@ -21,6 +21,7 @@ export default {
 
 <style lang="scss" scoped>
 .icon {
+  color: black;
   width: 1em; //1em表示1个字
   height: 1em;
   vertical-align: -0.15em;

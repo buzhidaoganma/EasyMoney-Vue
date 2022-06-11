@@ -15,3 +15,12 @@ $font-song: Georgia, 'Nimbus Roman No9 L', 'Songti SC', 'Noto Serif CJK SC',
   PMingLiU, MingLiU, serif;
 
 $color-highlight: #f00;
+
+//这个方法名字叫placeholder，用于解决float要些clearfix的问题,这种方法就是把这个经常用到的代码变成选择器，要用的时候引用就好了
+%clearFix {
+  &::after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+}

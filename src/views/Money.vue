@@ -15,7 +15,7 @@
     <div>
       <label class="notes">
         <span class="name">备注</span>
-        <input type="text" />
+        <input type="text" placeholder="在这里输入备注" />
       </label>
     </div>
 
@@ -40,8 +40,8 @@
         <button>7</button>
         <button>8</button>
         <button>9</button>
-        <button>OK</button>
-        <button>0</button>
+        <button class="ok">OK</button>
+        <button class="zero">0</button>
         <button>.</button>
       </div>
     </div>
@@ -54,4 +54,104 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '~@/assets/style/helper.scss';
+.numberPad {
+  .output {
+    font-size: 36px;
+    font-family: Consolas, monospace;
+    padding: 9px 16px;
+    text-align: right;
+  }
+  .buttons {
+    @extend %clearFix; //我复制了%x这个选择器
+    button {
+      width: 25%;
+      height: 64px; //7.9vh整个屏幕的高度的7.9%
+      float: left; //左边搞一列
+      background: transparent; //干掉背景色
+      border: none; //干掉border
+      &.ok {
+        height: 64 * 2px;
+        float: right; //右边搞一列
+      }
+      &.zero {
+        width: 25 * 2%;
+      }
+      &:nth-child(1) {
+        background: #f2f2f2;
+      }
+    }
+  }
+}
+
+.types {
+  background: #c4c4c4;
+  display: flex;
+  text-align: center;
+  font-size: 24px;
+  li {
+    width: 50%;
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    &.selected::after {
+      //这个符号&表示当前的li里面的selected
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 4px;
+      width: 100%;
+      background: #333;
+    }
+  }
+}
+
+.notes {
+  font-size: 14px;
+  background: #f5f5f5;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  .name {
+    padding-right: 16px;
+  }
+  input {
+    height: 64px;
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    padding-right: 16px;
+  }
+}
+
+.tags {
+  font-size: 14px;
+  padding: 16px;
+  > .current {
+    display: flex;
+    > li {
+      background: #d9d9d9;
+      $h: 24px;
+      height: $h;
+      line-height: $h;
+      border-radius: $h/2;
+      padding: 0 16px;
+      margin-right: 12px;
+    }
+  }
+  > .new {
+    padding-top: 16px;
+    button {
+      background: transparent;
+      border: none;
+      color: #999;
+      border-bottom: 1px solid;
+      padding: 0 4px;
+    }
+  }
+}
+</style>

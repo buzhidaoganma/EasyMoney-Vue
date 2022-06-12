@@ -9,25 +9,26 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 
-@Component({
-  props: {
-    propMessage: String,
-  },
-})
+@Component
 export default class Types extends Vue {
   type = '-'
+
+  // @Prop(Number) xxx: number | undefined //编译式的写法,告诉我们xxx的类型有number和undefiend(编译时类型)
+  // //Prop告诉Vue xxx不是data 是prop
+  // //Number（Vue不支持小写number）告诉Vue xxx是个number
+  // //xxx就是属性名
+  // //左边是运行时报错，右边是编译时报错
+
   selectType(type: string) {
-    //唯一的Ts 语法
     if (type !== '-' && type !== '+') {
       throw new Error('type is unknown')
     }
     this.type = type
   }
-  created() {}
-  mounted() {}
 }
+
 // export default {
 //   name: 'Types',
 //   props:['xxx'],

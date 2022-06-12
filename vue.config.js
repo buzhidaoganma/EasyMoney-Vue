@@ -10,8 +10,8 @@ module.exports = {
       .test(/.svg$/)
       .include.add(dir) //只有这个dir的目录使用这个规则
       .end()
-      .use('svg-sprite-loader-mod') //使用那些loader
-      .loader('svg-sprite-loader-mod') //说你的loader是哪个
+      .use('svg-sprite-loader') //使用那些loader
+      .loader('svg-sprite-loader') //说你的loader是哪个
       .options({ extract: false }) //添加一个选项，不要写出文件我不需要
       .end()
       .use('svgo-loader')
@@ -19,7 +19,7 @@ module.exports = {
       .end() //删除这个fill属性
     config
       .plugin('svg-sprite') //配置插件
-      .use(require('svg-sprite-loader-mod/plugin'), [{ plainSprite: true }])
+      .use(require('svg-sprite-loader/plugin'), [{ plainSprite: true }])
     config.module.rule('svg').exclude.add(dir) //其他svg loader 排除 icons目录
   },
 }

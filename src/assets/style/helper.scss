@@ -24,3 +24,14 @@ $color-highlight: #f00;
     display: block;
   }
 }
+
+$color-shadow: rgba(0, 0, 0, 0.25);
+//外阴影的引用
+%outerShadow {
+  box-shadow: 0 0 3px $color-shadow;
+}
+//内阴影的引用
+%innerShadow {
+  box-shadow: inset 0 -3px 3px -3px $color-shadow,
+    inset 0 3px 3px -3px $color-shadow;
+}

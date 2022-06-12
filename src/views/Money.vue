@@ -2,7 +2,7 @@
   <Layout classPrefix="layout">
     <NumberPad />
     <Notes />
-    <Types :xxx="33" />
+    <Types />
     <Tags />
   </Layout>
 </template>

@@ -2,7 +2,7 @@
   <Layout classPrefix="layout">
     <!-- classPrefix是这个标签的输出的属性，可以让这个class的名字有class-wrapper和class-content的类，比如这个就有了layout-content -->
     {{ record }}
-    <NumberPad @update:value="onUpdateAmount" />
+    <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />
     <Types :value.sync="record.type" />
     <!--@update:value="onUpdateType"  因为修饰符sync不要了-->
     <Notes @update:value="onUpdateNotes" />
@@ -16,7 +16,7 @@ import NumberPad from '@/components/Money_modules/NumberPad.vue'
 import Notes from '@/components/Money_modules/Notes.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 
 type Record = {
   tags: string[]
@@ -28,6 +28,7 @@ type Record = {
 @Component({ components: { Tags, Notes, Types, NumberPad } })
 export default class Money extends Vue {
   tags = ['衣', '食', '住', '行']
+  recordList: Record[] = []
   record: Record = { tags: [], notes: '', type: '', amount: 0 }
 
   onUpdateTags(value: string[]) {
@@ -41,6 +42,17 @@ export default class Money extends Vue {
   // }
   onUpdateAmount(value: string) {
     this.record.amount = parseFloat(value)
+  }
+  saveRecord() {
+    const record2 = JSON.parse(JSON.stringify(this.record))
+    this.recordList.push(record2)
+    console.log(this.recordList)
+    // localStorage.set('recordList',JSON.stringify(this.recordList))
+  }
+
+  @Watch('recordList')
+  onRecordListChange() {
+    window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
   }
 }
 </script>

@@ -17,6 +17,11 @@ import Notes from '@/components/Money_modules/Notes.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
+import model from '@/model'
+
+const recordList: RecordItem[] = model.fetch() //可以把：RecordItem[]删除了
+//JSON.parse(window.localStorage.getItem('recordList') || '[]',
+// ) 这里解决每次刷新页面数组为空的情况，特别注意“【】”空数组字符串//引入了model封装，用到封装的API来过去数据
 
 // const version = window.localStorage.getItem('version') || '0'
 // const recordList: Record[] = JSON.parse(
@@ -33,21 +38,11 @@ import { Component, Watch } from 'vue-property-decorator'
 // }
 // window.localStorage.setItem('version', '0.0.2')
 
-type Record = {
-  tags: string[]
-  notes: string
-  type: string
-  amount: number //数据类型
-  createdAt?: Date //Object的分类就叫类/构造函数,?表示createdAt不存在
-}
-
 @Component({ components: { Tags, Notes, Types, NumberPad } })
 export default class Money extends Vue {
   tags = ['衣', '食', '住', '行']
-  recordList: Record[] = JSON.parse(
-    window.localStorage.getItem('recordList') || '[]',
-  ) //这里解决每次刷新页面数组为空的情况，特别注意“【】”空数组字符串
-  record: Record = { tags: [], notes: '', type: '', amount: 0 }
+  recordList: RecordItem[] = recordList
+  record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 
   onUpdateTags(value: string[]) {
     this.record.tags = value
@@ -62,7 +57,7 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value)
   }
   saveRecord() {
-    const record2: Record = JSON.parse(JSON.stringify(this.record))
+    const record2: RecordItem = model.clone(this.record)
     record2.createdAt = new Date()
     this.recordList.push(record2)
     console.log(this.recordList)
@@ -71,7 +66,9 @@ export default class Money extends Vue {
 
   @Watch('recordList')
   onRecordListChange() {
-    window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
+    // window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
+    //上面的代码被拿去封装了再model.ts
+    model.save(this.recordList)
   }
 }
 </script>

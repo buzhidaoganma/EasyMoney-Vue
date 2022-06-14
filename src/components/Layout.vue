@@ -10,7 +10,7 @@
 
 <script lang="ts">
 export default {
-  props: ['classPrefix'],
+  props: ['classPrefix'], //Prefix是前缀
   name: 'Layout',
 }
 </script>

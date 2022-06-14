@@ -1,19 +1,24 @@
 <template>
   <div>
     <ul class="types">
-      <li :class="type === '-' && 'selected'" @click="selectType('-')">支出</li>
-      <li :class="type === '+' && 'selected'" @click="selectType('+')">收入</li>
+      <li :class="value === '-' && 'selected'" @click="selectType('-')">
+        支出
+      </li>
+      <li :class="value === '+' && 'selected'" @click="selectType('+')">
+        收入
+      </li>
     </ul>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
+import { Component, Prop, Watch } from 'vue-property-decorator'
 
 @Component
 export default class Types extends Vue {
-  type = '-'
+  // 1.type = '-'  由于要用初始值所以不需要了
+  @Prop() readonly value!: string
 
   // @Prop(Number) xxx: number | undefined //编译式的写法,告诉我们xxx的类型有number和undefiend(编译时类型)
   // //Prop告诉Vue xxx不是data 是prop
@@ -25,8 +30,13 @@ export default class Types extends Vue {
     if (type !== '-' && type !== '+') {
       throw new Error('type is unknown')
     }
-    this.type = type
+    this.$emit('update:value', type)
+    //1. this.type = type
   }
+  // 1.@Watch('type')
+  // 1.onTypeChanged(value: string) {
+  // 1.  this.$emit('update:value', value)
+  // }
 }
 
 // export default {

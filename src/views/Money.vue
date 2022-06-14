@@ -18,17 +18,35 @@ import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
 
+// const version = window.localStorage.getItem('version') || '0'
+// const recordList: Record[] = JSON.parse(
+//   window.localStorage.getItem('recordList') || '[]',
+// )
+// window.localStorage.setItem('version', '0.0.1')
+// if (version === '0.0.1') {
+//   //数据库升级，数据迁移
+//   recordList.forEach((record) => {
+//     record.createdAt = new Date(2022, 0, 1)
+//   })
+//   window.localStorage.setItem('recordList', JSON.stringify(recordList))
+//   //保存数据
+// }
+// window.localStorage.setItem('version', '0.0.2')
+
 type Record = {
   tags: string[]
   notes: string
   type: string
-  amount: number
+  amount: number //数据类型
+  createdAt?: Date //Object的分类就叫类/构造函数,?表示createdAt不存在
 }
 
 @Component({ components: { Tags, Notes, Types, NumberPad } })
 export default class Money extends Vue {
   tags = ['衣', '食', '住', '行']
-  recordList: Record[] = []
+  recordList: Record[] = JSON.parse(
+    window.localStorage.getItem('recordList') || '[]',
+  ) //这里解决每次刷新页面数组为空的情况，特别注意“【】”空数组字符串
   record: Record = { tags: [], notes: '', type: '', amount: 0 }
 
   onUpdateTags(value: string[]) {
@@ -44,7 +62,8 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value)
   }
   saveRecord() {
-    const record2 = JSON.parse(JSON.stringify(this.record))
+    const record2: Record = JSON.parse(JSON.stringify(this.record))
+    record2.createdAt = new Date()
     this.recordList.push(record2)
     console.log(this.recordList)
     // localStorage.set('recordList',JSON.stringify(this.recordList))

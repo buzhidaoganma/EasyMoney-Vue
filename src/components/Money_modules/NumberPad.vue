@@ -26,6 +26,7 @@ import { Component } from 'vue-property-decorator'
 @Component
 export default class NumberPad extends Vue {
   output: string = '0'
+
   inputContent(event: MouseEvent) {
     const button = event.target as HTMLButtonElement //强制执行类型，把他定义为button
     const input = button.textContent as string //等同于button.textContent!
@@ -60,6 +61,7 @@ export default class NumberPad extends Vue {
   ok() {
     this.$emit('update:value', this.output)
     this.$emit('submit', this.output)
+    this.output = '0' //点击OK后重置为0
   }
 }
 </script>

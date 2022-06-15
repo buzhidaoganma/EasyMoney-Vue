@@ -27,7 +27,7 @@ const routes = [
     component: Statistics,
   },
   {
-    path: '/labels/edit',
+    path: '/labels/edit/:id', //:id表示我edit后面会有一个字符串，但是我先不知道是多少，所以用：id表示我这里会有一个，只是占位
     component: EditLabel,
   },
   {

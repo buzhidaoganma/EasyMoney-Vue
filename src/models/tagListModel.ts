@@ -19,7 +19,7 @@ const tagListModel: TagListModel = {
   },
   create(name: string) {
     //这里的this.data=[{id:'1',name:'1'},{id:'2',name:'2'}]
-    const names = this.data.map((item) => item.name)
+    const names = this.data.map((item) => item.name) //就是把data里面所有name收集起来产生一个新的数组
     if (names.indexOf(name) >= 0) {
       return 'duplicated'
     }

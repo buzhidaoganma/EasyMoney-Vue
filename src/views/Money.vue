@@ -1,7 +1,7 @@
 <template>
   <Layout classPrefix="layout">
     <!-- classPrefix是这个标签的输出的属性，可以让这个class的名字有class-wrapper和class-content的类，比如这个就有了layout-content -->
-    {{ record }}
+    <!-- {{record}}可以显示获取到数据 -->
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />
     <Types :value.sync="record.type" />
     <!--@update:value="onUpdateType"  因为修饰符sync不要了-->
@@ -17,9 +17,11 @@ import Notes from '@/components/Money_modules/Notes.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
-import model from '@/model'
+import recordListModel from '@/models/recordListMode'
+import tagListModel from '@/models/tagListModel'
 
-const recordList: RecordItem[] = model.fetch() //可以把：RecordItem[]删除了
+const tagList = tagListModel.fetch()
+const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordItem[]删除了
 //JSON.parse(window.localStorage.getItem('recordList') || '[]',
 // ) 这里解决每次刷新页面数组为空的情况，特别注意“【】”空数组字符串//引入了model封装，用到封装的API来过去数据
 
@@ -40,7 +42,7 @@ const recordList: RecordItem[] = model.fetch() //可以把：RecordItem[]删除�
 
 @Component({ components: { Tags, Notes, Types, NumberPad } })
 export default class Money extends Vue {
-  tags = ['衣', '食', '住', '行']
+  tags = tagList
   recordList: RecordItem[] = recordList
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 
@@ -57,7 +59,7 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value)
   }
   saveRecord() {
-    const record2: RecordItem = model.clone(this.record)
+    const record2: RecordItem = recordListModel.clone(this.record)
     record2.createdAt = new Date()
     this.recordList.push(record2)
     console.log(this.recordList)
@@ -68,7 +70,7 @@ export default class Money extends Vue {
   onRecordListChange() {
     // window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
     //上面的代码被拿去封装了再model.ts
-    model.save(this.recordList)
+    recordListModel.save(this.recordList)
   }
 }
 </script>

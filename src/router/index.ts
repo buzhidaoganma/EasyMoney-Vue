@@ -5,6 +5,7 @@ import NotFound from '/Users/cz/Desktop/ZLC-方应杭学习项目/morney-2/src/v
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import EditLabel from '/Users/cz/Desktop/ZLC-方应杭学习项目/morney-2/src/views/EditLabel.vue'
 
 Vue.use(VueRouter)
 
@@ -24,6 +25,10 @@ const routes = [
   {
     path: '/statistics',
     component: Statistics,
+  },
+  {
+    path: '/labels/edit',
+    component: EditLabel,
   },
   {
     path: '*',

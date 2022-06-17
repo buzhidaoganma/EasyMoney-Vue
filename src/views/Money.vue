@@ -1,5 +1,6 @@
 <template>
   <Layout classPrefix="layout">
+    {{ record }}
     <!-- classPrefix是这个标签的输出的属性，可以让这个class的名字有class-wrapper和class-content的类，比如这个就有了layout-content -->
     <!-- {{record}}可以显示获取到数据 -->
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />

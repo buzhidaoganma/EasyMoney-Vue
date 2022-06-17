@@ -5,11 +5,13 @@
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />
     <Types :value.sync="record.type" />
     <!--@update:value="onUpdateType"  因为修饰符sync不要了-->
-    <Notes
-      fieldName="备注"
-      placeholder="在这里输入备注"
-      @update:value="onUpdateNotes"
-    />
+    <div class="notes">
+      <FormItem
+        fieldName="备注"
+        placeholder="在这里输入备注"
+        @update:value="onUpdateNotes"
+      />
+    </div>
     <Tags :dataSource.sync="tags" @update:value="onUpdateTags" />
   </Layout>
 </template>
@@ -17,7 +19,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import NumberPad from '@/components/Money_modules/NumberPad.vue'
-import Notes from '@/components/Money_modules/Notes.vue'
+import FormItem from '@/components/Money_modules/FormItem.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
@@ -44,7 +46,7 @@ const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordIte
 // }
 // window.localStorage.setItem('version', '0.0.2')
 
-@Component({ components: { Tags, Notes, Types, NumberPad } })
+@Component({ components: { Tags, FormItem, Types, NumberPad } })
 export default class Money extends Vue {
   tags = tagList
   recordList: RecordItem[] = recordList
@@ -84,6 +86,7 @@ export default class Money extends Vue {
   display: flex;
   flex-direction: column-reverse; //直接调整div的位置
 }
+.notes {
+  padding: 12px 0; //前面改了FormItem的高24px，所以上下隔个12px
+}
 </style>
-
-<style lang="scss" scoped></style>

@@ -12,12 +12,12 @@ import Vue from 'vue'
 import { Component, Prop, Watch } from 'vue-property-decorator'
 
 @Component
-export default class Notes extends Vue {
+export default class FormItem extends Vue {
   value = ''
 
   @Prop({ required: true }) fieldName!: string //自定义备注，{required: true}表示必填
   @Prop() placeholder?: string //?表示有可能不存在
-
+  //我输出这个两个变量fieldName和placeholder他们才能在Money.vue里的FormItem里面使用
   @Watch('value')
   onChildChanged(value: string) {
     this.$emit('update:value', value)
@@ -28,7 +28,6 @@ export default class Notes extends Vue {
 <style lang="scss" scoped>
 .notes {
   font-size: 14px;
-  background: #f5f5f5;
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -36,7 +35,7 @@ export default class Notes extends Vue {
     padding-right: 16px;
   }
   input {
-    height: 64px;
+    height: 40px;
     flex-grow: 1;
     background: transparent;
     border: none;

@@ -7,7 +7,7 @@
       <!-- 这个多余的标签是为了布局需要 -->
     </div>
     <div class="form-wrapper">
-      <FormItem fieldName="标签名" placeholder="请输入标签名" />
+      <FormItem :value="tag" fieldName="标签名" placeholder="请输入标签名" />
     </div>
     <div class="button-wrapper">
       <Button>删除标签</Button>
@@ -23,6 +23,7 @@ import Button from '../components/Button.vue'
 
 @Component({ components: { FormItem, Button } })
 export default class EditLabel extends Vue {
+  tag = undefined
   created() {
     const id = this.$route.params.id
     tagListModel.fetch()

@@ -7,7 +7,11 @@
       <!-- 这个多余的标签是为了布局需要 -->
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag" fieldName="标签名" placeholder="请输入标签名" />
+      <FormItem
+        :value="tag.name"
+        fieldName="标签名"
+        placeholder="请输入标签名"
+      />
     </div>
     <div class="button-wrapper">
       <Button>删除标签</Button>
@@ -23,14 +27,15 @@ import Button from '../components/Button.vue'
 
 @Component({ components: { FormItem, Button } })
 export default class EditLabel extends Vue {
-  tag = undefined
+  tag?: { id: string; name: string } = undefined //?的意思是他可以为空
   created() {
     const id = this.$route.params.id
     tagListModel.fetch()
     const tags = tagListModel.data
     const tag = tags.filter((t) => t.id === id)[0]
+    //然后我们去获取页面里面的id,通过这个id在所有的tags里面找到这个tag，然后把函数里面的tag 赋值到我定义的tag上
     if (tag) {
-      console.log(tag)
+      this.tag = tag
     } else {
       this.$router.replace('/404') //这里的replace(防止回退不了)可以用push
     }

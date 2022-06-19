@@ -1,7 +1,8 @@
 <template>
   <Layout>
     <div class="navBar">
-      <Icon class="leftIcon" name="left" />
+      <Icon class="leftIcon" name="left" @click="goBack" />
+      <!-- Icon组件并没有触发click -->
       <span class="title">编辑标签</span>
       <span class="rightIcon"></span>
       <!-- 这个多余的标签是为了布局需要 -->
@@ -9,12 +10,13 @@
     <div class="form-wrapper">
       <FormItem
         :value="tag.name"
+        @update:value="update"
         fieldName="标签名"
         placeholder="请输入标签名"
       />
     </div>
     <div class="button-wrapper">
-      <Button>删除标签</Button>
+      <Button @click="remove">删除标签</Button>
     </div>
   </Layout>
 </template>
@@ -39,6 +41,21 @@ export default class EditLabel extends Vue {
     } else {
       this.$router.replace('/404') //这里的replace(防止回退不了)可以用push
     }
+  }
+  update(name: string) {
+    if (this.tag) {
+      //如果这个tag存在再运行
+
+      tagListModel.update(this.tag.id, name)
+    }
+  }
+  remove() {
+    if (this.tag) {
+      tagListModel.remove(this.tag.id)
+    }
+  }
+  goBack() {
+    this.$router.back()
   }
 }
 </script>

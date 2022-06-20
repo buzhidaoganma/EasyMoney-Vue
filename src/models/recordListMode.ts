@@ -1,15 +1,20 @@
 const localStorageKeyName = 'recordList'
 const recordListModel = {
-  clone(data: RecordItem[] | RecordItem) {
-    return JSON.parse(JSON.stringify(data))
+  data: [] as RecordItem[],
+  clone() {
+    return JSON.parse(JSON.stringify(this.data))
   },
   fetch() {
-    return JSON.parse(
+    this.data = JSON.parse(
       window.localStorage.getItem('localStorageKeyName') || '[]',
     ) as RecordItem[] //这里声明好了，后面就可以不用写这个定义类型
+    return this.data
   },
-  save(data: RecordItem[]) {
-    window.localStorage.setItem('localStorageKeyName', JSON.stringify(data))
+  save() {
+    window.localStorage.setItem(
+      'localStorageKeyName',
+      JSON.stringify(this.data),
+    )
   },
 }
 

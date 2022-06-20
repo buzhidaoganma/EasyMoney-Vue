@@ -65,10 +65,10 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value)
   }
   saveRecord() {
-    const record2: RecordItem = recordListModel.clone(this.record)
-    record2.createdAt = new Date()
-    this.recordList.push(record2)
-    console.log(this.recordList)
+    recordListModel.create(this.record)
+    // const record2: RecordItem = recordListModel.clone(this.record)
+    // record2.createdAt = new Date()
+    // this.recordList.push(record2)
     // localStorage.set('recordList',JSON.stringify(this.recordList))
   }
 
@@ -76,7 +76,7 @@ export default class Money extends Vue {
   onRecordListChange() {
     // window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
     //上面的代码被拿去封装了再model.ts
-    recordListModel.save(this.recordList)
+    recordListModel.save()
   }
 }
 </script>

@@ -1,3 +1,5 @@
+import createId from '@/lib/crateId'
+
 const localStorageKeyName = 'tagList'
 type Tag = {
   id: string
@@ -21,15 +23,17 @@ const tagListModel: TagListModel = {
   },
   create(name: string) {
     //这里的this.data=[{id:'1',name:'1'},{id:'2',name:'2'}]
+
     const names = this.data.map((item) => item.name) //就是把data里面所有name收集起来产生一个新的数组
     if (names.indexOf(name) >= 0) {
       return 'duplicated'
     }
+    const id = createId().toString()
     // if (this.data.indexOf(name) >= 0) {
     //   //不能重复出现标签
     //   throw new Error('duplicated') //标签不能重复告诉用户原因
     // }
-    this.data.push({ id: name, name: name })
+    this.data.push({ id, name: name })
     this.save()
     return 'success'
   },

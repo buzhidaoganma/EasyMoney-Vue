@@ -48,7 +48,7 @@ const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordIte
 
 @Component({ components: { Tags, FormItem, Types, NumberPad } })
 export default class Money extends Vue {
-  tags = tagList
+  tags = window.tagList
   recordList: RecordItem[] = recordList
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 

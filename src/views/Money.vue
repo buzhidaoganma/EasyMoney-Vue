@@ -23,33 +23,31 @@ import FormItem from '@/components/Money_modules/FormItem.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
-import recordListModel from '@/models/recordListMode'
-import tagListModel from '@/models/tagListModel'
 
-const tagList = tagListModel.fetch()
-const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordItem[]删除了
-//JSON.parse(window.localStorage.getItem('recordList') || '[]',
-// ) 这里解决每次刷新页面数组为空的情况，特别注意“【】”空数组字符串//引入了model封装，用到封装的API来过去数据
+// const tagList = tagListModel.fetch()
+// const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordItem[]删除了
+// //JSON.parse(window.localStorage.getItem('recordList') || '[]',
+// // ) 这里解决每次刷新页面数组为空的情况，特别注意“【】”空数组字符串//引入了model封装，用到封装的API来过去数据
 
-// const version = window.localStorage.getItem('version') || '0'
-// const recordList: Record[] = JSON.parse(
-//   window.localStorage.getItem('recordList') || '[]',
-// )
-// window.localStorage.setItem('version', '0.0.1')
-// if (version === '0.0.1') {
-//   //数据库升级，数据迁移
-//   recordList.forEach((record) => {
-//     record.createdAt = new Date(2022, 0, 1)
-//   })
-//   window.localStorage.setItem('recordList', JSON.stringify(recordList))
-//   //保存数据
-// }
-// window.localStorage.setItem('version', '0.0.2')
+// // const version = window.localStorage.getItem('version') || '0'
+// // const recordList: Record[] = JSON.parse(
+// //   window.localStorage.getItem('recordList') || '[]',
+// // )
+// // window.localStorage.setItem('version', '0.0.1')
+// // if (version === '0.0.1') {
+// //   //数据库升级，数据迁移
+// //   recordList.forEach((record) => {
+// //     record.createdAt = new Date(2022, 0, 1)
+// //   })
+// //   window.localStorage.setItem('recordList', JSON.stringify(recordList))
+// //   //保存数据
+// // }
+// // window.localStorage.setItem('version', '0.0.2')
 
 @Component({ components: { Tags, FormItem, Types, NumberPad } })
 export default class Money extends Vue {
   tags = window.tagList
-  recordList: RecordItem[] = recordList
+  recordList = window.recordList
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 
   onUpdateTags(value: string[]) {
@@ -65,19 +63,19 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value)
   }
   saveRecord() {
-    recordListModel.create(this.record)
+    window.createRecord(this.record)
     // const record2: RecordItem = recordListModel.clone(this.record)
     // record2.createdAt = new Date()
     // this.recordList.push(record2)
     // localStorage.set('recordList',JSON.stringify(this.recordList))
   }
 
-  @Watch('recordList')
-  onRecordListChange() {
-    // window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
-    //上面的代码被拿去封装了再model.ts
-    recordListModel.save()
-  }
+  // @Watch('recordList')
+  // onRecordListChange() {
+  //   // window.localStorage.setItem('recordList', JSON.stringify(this.recordList))
+  //   //上面的代码被拿去封装了再model.ts
+  //   recordListModel.save()
+  // }
 }
 </script>
 

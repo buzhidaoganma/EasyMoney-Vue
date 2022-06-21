@@ -26,4 +26,6 @@ interface Window {
   findTag: (id: string) => Tag | undefined
   removeTag: (id: string) => boolean
   updateTag: TagListModel['update'] //意思是我的类型跟上面的TagListModel一样
+  recordList: RecordItem[]
+  createRecord: (record: RecordItem) => void
 }

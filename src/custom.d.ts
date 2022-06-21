@@ -22,4 +22,5 @@ type TagListModel = {
 interface Window {
   //给window定义
   tagList: Tag[]
+  createTag: (name: string) => void //返回值就是没有
 }

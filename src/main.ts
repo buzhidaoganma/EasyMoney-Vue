@@ -15,6 +15,9 @@ Vue.component('Layout', Layout)
 Vue.component('Icon', Icon)
 
 window.tagList = tagListModel.fetch()
+window.findTag = (id: string) => {
+  return window.tagList.filter((t) => t.id === id)[0]
+}
 window.createTag = (name: string) => {
   const message = tagListModel.create(name) //写的时候要知道是用这个，封装一下
   if (message === 'duplicated') {
@@ -23,6 +26,14 @@ window.createTag = (name: string) => {
     window.alert('添加成功')
   }
 }
+window.removeTag = (id: string) => {
+  return tagListModel.remove(id)
+}
+window.updateTag = (id: string, name: string) => {
+  //Exclude表达除了id的tag属性
+  return tagListModel.update(id, name)
+}
+
 new Vue({
   router,
   store,

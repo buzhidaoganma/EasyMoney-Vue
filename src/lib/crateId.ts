@@ -3,7 +3,7 @@ let id: number = parseInt(window.localStorage.getItem('_idMax') || '0') || 0 //_
 
 function createId() {
   id++
-  window.localStorage.setItem('_idMax', id.toString())
+  window.localStorage.setItem('_idMax', id.toString()) //这一步一定要做要不然刷新网页之后这个值不会存储
   return id
 }
 export default createId

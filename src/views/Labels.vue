@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts">
+import store from '@/store/index2'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Button from '../components/Button.vue'
@@ -26,25 +27,25 @@ import Button from '../components/Button.vue'
 
 @Component({ components: { Button } })
 export default class Labels extends Vue {
-  tags = window.tagList //第一步知道在window上读
+  tags = store.tagList //第一步知道在window上读
   createTag() {
     const name = window.prompt('请输入标签名')
     if (name) {
-      window.createTag(name)
+      store.createTag(name)
       // const message = tagListModel.create(name) //写的时候要知道是用这个，封装一下
       // if (message === 'duplicated') {
-      //   window.alert('标签重复')
+      //  store.alert('标签重复')
       //   // try {
       //   //   tagListModel.create(name)
       //   // } catch (error: any) {
       //   //   //标签不能实现告诉用户原因
       //   //   if (error.message === 'duplicated') {
       //   //     //通过console.log找出对应的属性值通过这个来判断
-      //   //     window.alert('标签重复')
+      //   //    store.alert('标签重复')
       //   //   }
       //   // }
       // } else if (message === 'success') {
-      //   window.alert('添加成功')
+      //  store.alert('添加成功')
       // }
     }
   }

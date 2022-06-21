@@ -23,6 +23,7 @@ import FormItem from '@/components/Money_modules/FormItem.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
+import store from '@/store/index2'
 
 // const tagList = tagListModel.fetch()
 // const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordItem[]删除了
@@ -46,8 +47,8 @@ import { Component, Watch } from 'vue-property-decorator'
 
 @Component({ components: { Tags, FormItem, Types, NumberPad } })
 export default class Money extends Vue {
-  tags = window.tagList
-  recordList = window.recordList
+  tags = store.tagList
+  recordList = store.recordList
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 
   onUpdateTags(value: string[]) {
@@ -63,7 +64,7 @@ export default class Money extends Vue {
     this.record.amount = parseFloat(value)
   }
   saveRecord() {
-    window.createRecord(this.record)
+    store.createRecord(this.record)
     // const record2: RecordItem = recordListModel.clone(this.record)
     // record2.createdAt = new Date()
     // this.recordList.push(record2)

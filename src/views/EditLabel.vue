@@ -25,17 +25,18 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import FormItem from '../components/Money_modules/FormItem.vue'
 import Button from '../components/Button.vue'
+import store from '@/store/index2'
 
 @Component({ components: { FormItem, Button } })
 export default class EditLabel extends Vue {
   // tag?: { id: string; name: string } = undefined //?的意思是他可以为空
-  tag = window.findTag(this.$route.params.id)
+  tag = store.findTag(this.$route.params.id)
   created() {
     // // const id = this.$route.params.id
     // // // tagListModel.fetch()
     // // // const tags = tagListModel.data
-    // // const tag = window.findTag(id)
-    // // // const tags = window.tagList
+    // // const tag = store.findTag(id)
+    // // // const tags = store.tagList
     // // // const tag = tags.filter((t) => t.id === id)[0]
     // // //然后我们去获取页面里面的id,通过这个id在所有的tags里面找到这个tag，然后把函数里面的tag 赋值到我定义的tag上
     // // // if (tag) {
@@ -43,7 +44,7 @@ export default class EditLabel extends Vue {
     // // // } else {
     // // //   this.$router.replace('/404') //这里的replace(防止回退不了)可以用push
     // // // }
-    // this.tag=window.findTag(this.$route.params.id)
+    // this.tag=store.findTag(this.$route.params.id)
     if (!this.tag) {
       this.$router.replace('/404')
     }
@@ -52,13 +53,12 @@ export default class EditLabel extends Vue {
   update(name: string) {
     if (this.tag) {
       //如果这个tag存在再运行
-
-      window.updateTag(this.tag.id, name)
+      store.updateTag(this.tag.id, name)
     }
   }
   remove() {
     if (this.tag) {
-      if (window.removeTag(this.tag.id)) {
+      if (store.removeTag(this.tag.id)) {
         this.$router.back()
       } else {
         window.alert('删除失败')

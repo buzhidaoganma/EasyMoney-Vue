@@ -20,12 +20,14 @@ type TagListModel = {
 }
 
 interface Window {
-  //给window定义
-  tagList: Tag[]
-  createTag: (name: string) => void //返回值就是没有
-  findTag: (id: string) => Tag | undefined
-  removeTag: (id: string) => boolean
-  updateTag: TagListModel['update'] //意思是我的类型跟上面的TagListModel一样
-  recordList: RecordItem[]
-  createRecord: (record: RecordItem) => void
+  // store: {
+  //   //给window定义
+  //   tagList: Tag[]
+  //   createTag: (name: string) => void //返回值就是没有
+  //   findTag: (id: string) => Tag | undefined
+  //   removeTag: (id: string) => boolean
+  //   updateTag: TagListModel['update'] //意思是我的类型跟上面的TagListModel一样
+  //   recordList: RecordItem[]
+  //   createRecord: (record: RecordItem) => void
+  // }
 }

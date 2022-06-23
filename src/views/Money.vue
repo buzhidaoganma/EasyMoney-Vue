@@ -12,7 +12,9 @@
         @update:value="onUpdateNotes"
       />
     </div>
-    <Tags :dataSource.sync="tags" @update:value="onUpdateTags" />
+    <Tags />
+    <!-- :dataSource.sync="tags"在Tags里面已经做好了传输所以不需要了-->
+    <!-- @update:value="onUpdateTags"被换成add事件了 -->
   </Layout>
 </template>
 
@@ -47,13 +49,13 @@ import store from '@/store/index2'
 
 @Component({ components: { Tags, FormItem, Types, NumberPad } })
 export default class Money extends Vue {
-  tags = store.tagList
+  // tags = store.tagList
   recordList = store.recordList
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 
-  onUpdateTags(value: string[]) {
-    this.record.tags = value
-  }
+  // onUpdateTags(value: string[]) {
+  //   this.record.tags = value
+  // }
   onUpdateNotes(value: string) {
     this.record.notes = value
   }

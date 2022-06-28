@@ -24,9 +24,7 @@ import { Component, Prop } from 'vue-property-decorator'
 @Component({
   computed: {
     tagList() {
-      //TODO
-      // return this.$store.fetchTags()
-      return []
+      return this.$store.state.tagList
     },
   },
 })
@@ -37,6 +35,11 @@ export default class Tags extends Vue {
 
   // tagList = store.fetchTags()把它放到computed里面了 //把原来Money.vue定义的tagList去掉了，在这里加
   selectedTags: string[] = []
+
+  created() {
+    this.$store.commit('fetchTags')
+  }
+
   toggle(tag: string) {
     const index = this.selectedTags.indexOf(tag)
     if (index >= 0) {
@@ -58,7 +61,7 @@ export default class Tags extends Vue {
       // this.$emit('add', name)
       // //当用户点击新增标签的时候我们触发add事件，把用户新增的这个name传给外面，让外面去create,因为我的Tag可能不想去create
       // //其实我们也可以自己在内部create，因为我们的数据现在是全局管理的，任何地方都可以调用它
-      // TODO
+      this.$store.commit('createTag', name)
       // store.createTag(name)
     }
   }

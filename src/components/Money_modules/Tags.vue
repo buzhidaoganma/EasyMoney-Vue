@@ -18,15 +18,24 @@
 </template>
 
 <script lang="ts">
-import store from '@/store/index2'
+// import store from '@/store/index2'
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-@Component
+@Component({
+  computed: {
+    tagList() {
+      //TODO
+      // return this.$store.fetchTags()
+      return []
+    },
+  },
+})
 export default class Tags extends Vue {
-  @Prop({ required: true }) readonly dataSource!: string[] //| undefined //告诉Ts我的tags是字符串数组(string[])
-  //加readonly是为了说明不能直接更改外部的数据//去掉undefined,加！表明不能为空,加入{required:true}表明你必须给我传不传我就报错
+  // @Prop({ required: true }) readonly tag!: string[]//| undefined //告诉Ts我的tags是字符串数组(string[])
+  // //加readonly是为了说明不能直接更改外部的数据//去掉undefined,加！表明不能为空,加入{required:true}表明你必须给我传不传我就报错
+  //这个prop已经用不上了，没有外面传进来的参数
 
-  tagList = store.fetchTags() //把原来Money.vue定义的tagList去掉了，在这里加
+  // tagList = store.fetchTags()把它放到computed里面了 //把原来Money.vue定义的tagList去掉了，在这里加
   selectedTags: string[] = []
   toggle(tag: string) {
     const index = this.selectedTags.indexOf(tag)
@@ -49,7 +58,8 @@ export default class Tags extends Vue {
       // this.$emit('add', name)
       // //当用户点击新增标签的时候我们触发add事件，把用户新增的这个name传给外面，让外面去create,因为我的Tag可能不想去create
       // //其实我们也可以自己在内部create，因为我们的数据现在是全局管理的，任何地方都可以调用它
-      store.createTag(name)
+      // TODO
+      // store.createTag(name)
     }
   }
 }

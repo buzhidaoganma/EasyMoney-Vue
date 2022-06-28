@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-import store from '@/store/index2'
+// import store from '@/store/index2'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import Button from '../components/Button.vue'
@@ -27,11 +27,11 @@ import Button from '../components/Button.vue'
 
 @Component({ components: { Button } })
 export default class Labels extends Vue {
-  tags = store.tagList //第一步知道在window上读
+  tags = [] //store.tagList //第一步知道在window上读
   createTag() {
     const name = window.prompt('请输入标签名')
     if (name) {
-      store.createTag(name)
+      //store.createTag(name) 用VueX
       // const message = tagListModel.create(name) //写的时候要知道是用这个，封装一下
       // if (message === 'duplicated') {
       //  store.alert('标签重复')

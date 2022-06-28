@@ -14,7 +14,8 @@ Vue.component('Layout', Layout)
 Vue.component('Icon', Icon)
 
 new Vue({
+  //这个上面的东西就是Vue原型上的东西，可以直接用this.$store调用
   router,
-  store,
+  store, //把store传过来，Vuex告诉Vue把它存在Vue的原型
   render: (h) => h(App),
 }).$mount('#app')

@@ -25,7 +25,8 @@ import FormItem from '@/components/Money_modules/FormItem.vue'
 import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
-import store from '@/store/index2'
+// import store from '@/store/index2'
+import store2 from '@/store/index'
 
 // const tagList = tagListModel.fetch()
 // const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordItem[]删除了
@@ -47,30 +48,49 @@ import store from '@/store/index2'
 // // }
 // // window.localStorage.setItem('version', '0.0.2')
 
-@Component({ components: { Tags, FormItem, Types, NumberPad } })
+@Component({
+  components: { Tags, FormItem, Types, NumberPad },
+  computed: {
+    //读的时候用这个，写的时候就用$store2代码无非就是用到读和写
+    //功能：当它里面的值变化的时候他就会更新外面的
+    recordList() {
+      return this.$store.state.recordList
+    },
+    // count() {
+    //   return store2.state.count //这里也可以不引用import store2可以直接写成this.$store2
+    // },
+  },
+})
 export default class Money extends Vue {
   // tags = store.tagList
-  recordList = store.recordList
+  // recordList = store.recordList这个直接写在了computed了，这样可以防止数据不同步（值和地址）
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
 
   // onUpdateTags(value: string[]) {
   //   this.record.tags = value
   // }
+  created() {
+    this.$store.commit('fetchRecords')
+  }
   onUpdateNotes(value: string) {
     this.record.notes = value
   }
+
   // onUpdateType(value: string) {
   //   this.record.type = value
   // }
+
   onUpdateAmount(value: string) {
     this.record.amount = parseFloat(value)
   }
+
   saveRecord() {
-    store.createRecord(this.record)
-    // const record2: RecordItem = recordListModel.clone(this.record)
-    // record2.createdAt = new Date()
-    // this.recordList.push(record2)
-    // localStorage.set('recordList',JSON.stringify(this.recordList))
+    this.$store.commit('createRecord', this.record)
+    // store.createRecord(this.record)
+    // // const record2: RecordItem = recordListModel.clone(this.record)
+    // // record2.createdAt = new Date()
+    // // this.recordList.push(record2)
+    // // localStorage.set('recordList',JSON.stringify(this.recordList))
   }
 
   // @Watch('recordList')

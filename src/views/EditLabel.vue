@@ -4,7 +4,7 @@
       <Icon class="leftIcon" name="left" @click="goBack" />
       <!-- Icon组件并没有触发click -->
       <span class="title">编辑标签</span>
-      <span class="rightIcon"></span>
+      <span class="rightIcon" />
       <!-- 这个多余的标签是为了布局需要 -->
     </div>
     <div class="form-wrapper">
@@ -25,12 +25,13 @@ import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import FormItem from '../components/Money_modules/FormItem.vue'
 import Button from '../components/Button.vue'
-import store from '@/store/index2'
+// import store from '@/store/index2'  用Vuex来代替store
 
 @Component({ components: { FormItem, Button } })
 export default class EditLabel extends Vue {
   // tag?: { id: string; name: string } = undefined //?的意思是他可以为空
-  tag = store.findTag(this.$route.params.id)
+  // tag = store.findTag(this.$route.params.id)用Vuex
+  tag?: Tag = undefined
   created() {
     // // const id = this.$route.params.id
     // // // tagListModel.fetch()
@@ -53,16 +54,17 @@ export default class EditLabel extends Vue {
   update(name: string) {
     if (this.tag) {
       //如果这个tag存在再运行
-      store.updateTag(this.tag.id, name)
+      // store.updateTag(this.tag.id, name)
     }
   }
   remove() {
     if (this.tag) {
-      if (store.removeTag(this.tag.id)) {
-        this.$router.back()
-      } else {
-        window.alert('删除失败')
-      }
+      return
+      // if (store.removeTag(this.tag.id)) {
+      //   this.$router.back()
+      // } else {
+      //   window.alert('删除失败')
+      // }
     }
   }
   goBack() {

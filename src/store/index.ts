@@ -6,13 +6,20 @@ import Vuex from 'vuex'
 Vue.use(Vuex) //把store绑在Vue.prototype上，所以可以用
 const localStorageKeyName = 'recordList'
 
+type RootState = {
+  recordList: RecordItem[]
+  tagList: Tag[]
+  currentTag?: Tag
+}
+
 const store2 = new Vuex.Store({
   state: {
     recordList: [] as RecordItem[],
     tagList: [] as Tag[],
+    currentTag: undefined, //
     // //data
     // count: 0,
-  },
+  } as RootState,
   mutations: {
     fetchRecords(state) {
       const recordList = JSON.parse(
@@ -60,6 +67,14 @@ const store2 = new Vuex.Store({
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList))
     },
+
+    // findTag(state, id: string) {
+    //   return state.tagList.filter((t) => t.id === id)[0]
+    // },
+    setCurrentTag(state, id: string) {
+      state.currentTag = state.tagList.filter((t) => t.id === id)[0]
+    },
+    //代替findTag由于因为类型定义的问题，重新做了一次
   },
 })
 

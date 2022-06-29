@@ -27,12 +27,23 @@ import FormItem from '../components/Money_modules/FormItem.vue'
 import Button from '../components/Button.vue'
 // import store from '@/store/index2'  用Vuex来代替store
 
-@Component({ components: { FormItem, Button } })
+@Component({
+  components: { FormItem, Button },
+  // computed: {
+  //   tag() {
+  //     return this.$store.state.currentTag
+  //   },
+  // },不能使用换成get tag（）{}方法
+})
 export default class EditLabel extends Vue {
   // tag?: { id: string; name: string } = undefined //?的意思是他可以为空
-  // tag = store.findTag(this.$route.params.id)用Vuex
-  tag?: Tag = undefined
+  //tag = store.findTag(this.$route.params.id)用Vuex
+  // tag?: Tag = undefined
+  get tag() {
+    return this.$store.state.currentTag
+  }
   created() {
+    const id = this.$route.params.id
     // // const id = this.$route.params.id
     // // // tagListModel.fetch()
     // // // const tags = tagListModel.data
@@ -45,7 +56,9 @@ export default class EditLabel extends Vue {
     // // // } else {
     // // //   this.$router.replace('/404') //这里的replace(防止回退不了)可以用push
     // // // }
-    // this.tag=store.findTag(this.$route.params.id)
+
+    // this.tag = this.$store.commit('findTag', this.$route.params.id)这个不能用是因为类型的问题，重新声明了一个currentTag
+    this.$store.commit('setCurrentTag', id)
     if (!this.tag) {
       this.$router.replace('/404')
     }

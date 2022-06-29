@@ -30,13 +30,16 @@ import { mixins } from 'vue-class-component'
 @Component({
   components: { Button },
   // mixins: [tagHelper], //新建一个createTag的方法所以注释了底下的东西用这个
-  computed: {
-    tags() {
-      return this.$store.state.tagList
-    },
-  },
+  // computed: {
+  //   tags() {
+  //     return this.$store.state.tagList
+  //   },
+  // },
 })
 export default class Labels extends mixins(TagHelper) {
+  get tags() {
+    return this.$store.state.tagList
+  }
   beforeCreate() {
     this.$store.commit('fetchTags')
   }

@@ -1,5 +1,6 @@
 import clone from '@/lib/clone'
 import createId from '@/lib/crateId'
+import router from '@/router'
 import Vue from 'vue'
 import Vuex from 'vuex'
 
@@ -75,6 +76,48 @@ const store2 = new Vuex.Store({
       state.currentTag = state.tagList.filter((t) => t.id === id)[0]
     },
     //代替findTag由于因为类型定义的问题，重新做了一次
+
+    //updateTag(state,id: string,name:string) {//这个里面只能接受两个属性多了就报错
+    updateTag(state, payload: { id: string; name: string }) {
+      // const id = object.id
+      // const name = object.name 可以析构成这样
+      const { id, name } = payload
+
+      const idList = state.tagList.map((item) => item.id)
+      if (idList.indexOf(id) >= 0) {
+        const names = state.tagList.map((item) => item.name)
+        if (names.indexOf(name) >= 0) {
+          // return 'duplicated'
+          window.alert('标签名重复了')
+        } else {
+          const tag = state.tagList.filter((item) => item.id === id)[0]
+          tag.name = name
+          store2.commit('saveTags')
+          // return 'success'在这里面是无法返回的
+        }
+      } else {
+        // return 'not found'
+      }
+    },
+    removeTag(state, id: string) {
+      let index = -1
+      for (let i = 0; i < state.tagList.length; i++) {
+        if (state.tagList[i].id === id) {
+          index = i
+          break
+        }
+      }
+      if (index >= 0) {
+        state.tagList.splice(index, 1)
+        store2.commit('saveTags')
+        router.back() //this.$router.back()不能用this,但是我们之前提过$开头的实例就在Vue的原型上
+        //上面那个Vue.prototype的方法不行直接去引用router就好了
+      } else {
+        window.alert('删除失败')
+      }
+
+      // return true
+    },
   },
 })
 

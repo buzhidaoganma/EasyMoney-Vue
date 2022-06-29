@@ -40,7 +40,7 @@ const tagStore = {
     let index = -1
     for (let i = 0; i < this.tagList.length; i++) {
       if (this.tagList[i].id === id) {
-        index = -1
+        index = i
         break
       }
     }

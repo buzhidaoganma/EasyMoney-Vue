@@ -58,6 +58,7 @@ export default class EditLabel extends Vue {
     // // // }
 
     // this.tag = this.$store.commit('findTag', this.$route.params.id)这个不能用是因为类型的问题，重新声明了一个currentTag
+    this.$store.commit('fetchTags') //如果不写这一步，直接在标签页面刷新会直接报错，因为它没有获取tag数据
     this.$store.commit('setCurrentTag', id)
     if (!this.tag) {
       this.$router.replace('/404')
@@ -68,16 +69,19 @@ export default class EditLabel extends Vue {
     if (this.tag) {
       //如果这个tag存在再运行
       // store.updateTag(this.tag.id, name)
+      this.$store.commit('updateTag', { id: this.tag.id, name })
     }
   }
   remove() {
+    // if (this.tag) {
+    //   if (store.removeTag(this.tag.id)) {
+    //     this.$router.back()
+    //   } else {
+    //     window.alert('删除失败')
+    //   }
+    // }
     if (this.tag) {
-      return
-      // if (store.removeTag(this.tag.id)) {
-      //   this.$router.back()
-      // } else {
-      //   window.alert('删除失败')
-      // }
+      this.$store.commit('removeTag', this.tag.id)
     }
   }
   goBack() {

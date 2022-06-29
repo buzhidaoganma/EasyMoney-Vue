@@ -1,7 +1,7 @@
 <template>
   <div class="tags">
     <div class="new">
-      <button @click="create">新增标签</button>
+      <button @click="createTag">新增标签</button>
     </div>
     <ul class="current">
       <li
@@ -19,7 +19,9 @@
 
 <script lang="ts">
 // import store from '@/store/index2'
+import TagHelper from '@/mixins/TagHelper'
 import Vue from 'vue'
+import { mixins } from 'vue-class-component'
 import { Component, Prop } from 'vue-property-decorator'
 @Component({
   computed: {
@@ -28,7 +30,7 @@ import { Component, Prop } from 'vue-property-decorator'
     },
   },
 })
-export default class Tags extends Vue {
+export default class Tags extends mixins(TagHelper) {
   // @Prop({ required: true }) readonly tag!: string[]//| undefined //告诉Ts我的tags是字符串数组(string[])
   // //加readonly是为了说明不能直接更改外部的数据//去掉undefined,加！表明不能为空,加入{required:true}表明你必须给我传不传我就报错
   //这个prop已经用不上了，没有外面传进来的参数
@@ -49,22 +51,22 @@ export default class Tags extends Vue {
     }
     this.$emit('update:value', this.selectedTags)
   }
-  create() {
-    const name = window.prompt('请输入标签名')
-    // if (name === '') {
-    if (!name) {
-      //为了应对name有可能为空的情况，！name表示name不存在,让它先走逻辑
-      return window.alert('标签名不能为空')
-    } else if (name) {
-      // this.$emit('update:dataSource', [...this.dataSource, name])
-      //太粗糙了
-      // this.$emit('add', name)
-      // //当用户点击新增标签的时候我们触发add事件，把用户新增的这个name传给外面，让外面去create,因为我的Tag可能不想去create
-      // //其实我们也可以自己在内部create，因为我们的数据现在是全局管理的，任何地方都可以调用它
-      this.$store.commit('createTag', name)
-      // store.createTag(name)
-    }
-  }
+  // create() {
+  //   const name = window.prompt('请输入标签名')
+  //   // if (name === '') {
+  //   if (!name) {
+  //     //为了应对name有可能为空的情况，！name表示name不存在,让它先走逻辑
+  //     return window.alert('标签名不能为空')
+  //   } else if (name) {
+  //     // this.$emit('update:dataSource', [...this.dataSource, name])
+  //     //太粗糙了
+  //     // this.$emit('add', name)
+  //     // //当用户点击新增标签的时候我们触发add事件，把用户新增的这个name传给外面，让外面去create,因为我的Tag可能不想去create
+  //     // //其实我们也可以自己在内部create，因为我们的数据现在是全局管理的，任何地方都可以调用它
+  //     this.$store.commit('createTag', name)
+  //     // store.createTag(name)
+  //   }
+  // }
 }
 </script>
 

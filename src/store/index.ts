@@ -40,9 +40,7 @@ const store2 = new Vuex.Store({
     // }, //调用这个的时候不能直接用.需要用它封装好的API，store.commit('increment')
 
     fetchTags(state) {
-      const tagList = JSON.parse(
-        window.localStorage.getItem(localStorageKeyName) || '[]',
-      )
+      const tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]')
       return (state.tagList = tagList)
     },
     createTag(state, name: string) {

@@ -23,7 +23,7 @@
 import Vue from 'vue'
 import NumberPad from '@/components/Money_modules/NumberPad.vue'
 import FormItem from '@/components/Money_modules/FormItem.vue'
-import Types from '@/components/Money_modules/Types.vue'
+// import Types from '@/components/Money_modules/Types.vue'
 import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
 // import store from '@/store/index2'
@@ -52,7 +52,7 @@ import recordTypeList from '@/constants/recordTypeList'
 // // window.localStorage.setItem('version', '0.0.2')
 
 @Component({
-  components: { Tags, FormItem, Types, NumberPad, Tabs },
+  components: { Tags, FormItem, NumberPad, Tabs },
   computed: {
     //读的时候用这个，写的时候就用$store2代码无非就是用到读和写
     //功能：当它里面的值变化的时候他就会更新外面的

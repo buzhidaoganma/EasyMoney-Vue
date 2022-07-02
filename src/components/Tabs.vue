@@ -1,6 +1,7 @@
 <template>
   <ul class="tabs">
     <li
+      class="tabs-item"
       v-for="item in dataSource"
       :key="item.value"
       :class="liClass(item)"
@@ -47,7 +48,8 @@ export default class Tabs extends Vue {
   display: flex;
   text-align: center;
   font-size: 24px;
-  li {
+  /* li{  第二种降低外面的优先级 让它里面只有或者只对应一个选择器 这个-表示只有一级选择器，上面加了一个tabs-item的class*/
+  &-item {
     width: 50%;
     height: 64px;
     display: flex;

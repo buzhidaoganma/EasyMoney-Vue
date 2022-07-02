@@ -21,10 +21,10 @@ import intervalList from '@/constants/intervalList'
 import recordTypeList from '@/constants/recordTypeList'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import Types from '../components/Money_modules/Types.vue'
+// import Types from '../components/Money_modules/Types.vue'
 import Tabs from '../components/Tabs.vue'
 
-@Component({ components: { Types, Tabs } })
+@Component({ components: { Tabs } })
 export default class Statistics extends Vue {
   type = '-'
   interval = 'day'
@@ -43,4 +43,9 @@ export default class Statistics extends Vue {
     }
   }
 }
+::v-deep .interval-tabs-item {
+  height: 48px;
+} //刚写这个48的时候没有反应，可以写48px!important强制生效，不过一般不写
+//原因是由于外边的li优先级比较高，所以48没有生效，所以写li.interval,这是一种方法提高里面的优先级
+//第二种降低外面的优先级
 </style>

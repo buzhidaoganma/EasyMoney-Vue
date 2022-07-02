@@ -3,8 +3,9 @@
     <!-- classPrefix是这个标签的输出的属性，可以让这个class的名字有class-wrapper和class-content的类，比如这个就有了layout-content -->
     <!-- {{record}}可以显示获取到数据 -->
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord" />
-    <Types :value.sync="record.type" />
-    <!--@update:value="onUpdateType"  因为修饰符sync不要了-->
+    <!-- <Types :value.sync="record.type" /> 被Tabs替代了
+    @update:value="onUpdateType"  因为修饰符sync不要了 -->
+    <Tabs :dataSource="recordTypeList" :value.sync="record.type" />
     <div class="notes">
       <FormItem
         fieldName="备注"
@@ -27,6 +28,8 @@ import Tags from '@/components/Money_modules/Tags.vue'
 import { Component, Watch } from 'vue-property-decorator'
 // import store from '@/store/index2'
 import store2 from '@/store/index'
+import Tabs from '../components/Tabs.vue'
+import recordTypeList from '@/constants/recordTypeList'
 
 // const tagList = tagListModel.fetch()
 // const recordList: RecordItem[] = recordListModel.fetch() //可以把：RecordItem[]删除了
@@ -49,7 +52,7 @@ import store2 from '@/store/index'
 // // window.localStorage.setItem('version', '0.0.2')
 
 @Component({
-  components: { Tags, FormItem, Types, NumberPad },
+  components: { Tags, FormItem, Types, NumberPad, Tabs },
   computed: {
     //读的时候用这个，写的时候就用$store2代码无非就是用到读和写
     //功能：当它里面的值变化的时候他就会更新外面的
@@ -62,6 +65,8 @@ import store2 from '@/store/index'
   },
 })
 export default class Money extends Vue {
+  recordTypeList = recordTypeList //拿到这个常量
+
   // tags = store.tagList
   // recordList = store.recordList这个直接写在了computed了，这样可以防止数据不同步（值和地址）
   record: RecordItem = { tags: [], notes: '', type: '', amount: 0 }
@@ -69,6 +74,7 @@ export default class Money extends Vue {
   // onUpdateTags(value: string[]) {
   //   this.record.tags = value
   // }
+
   created() {
     this.$store.commit('fetchRecords')
   }

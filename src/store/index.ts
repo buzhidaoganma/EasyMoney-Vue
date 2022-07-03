@@ -7,11 +7,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex) //把store绑在Vue.prototype上，所以可以用
 const localStorageKeyName = 'recordList'
 
-type RootState = {
-  recordList: RecordItem[]
-  tagList: Tag[]
-  currentTag?: Tag
-}
+// type RootState = {
+//   recordList: RecordItem[]
+//   tagList: Tag[]
+//   currentTag?: Tag
+// }放到全局的文件d.ts
 
 const store2 = new Vuex.Store({
   state: {
@@ -30,7 +30,7 @@ const store2 = new Vuex.Store({
     },
     createRecord(state, record) {
       const record2: RecordItem = clone(record)
-      record2.createdAt = new Date()
+      record2.createdAt = new Date().toISOString()
       state.recordList && state.recordList.push(record2) //state是肯定有的，所以可以省略判断
       store2.commit('saveRecords')
       console.log(state.recordList)

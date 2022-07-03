@@ -35,7 +35,7 @@ const recordStore = {
   },
   createRecord(record: RecordItem) {
     const record2: RecordItem = clone(record)
-    record2.createdAt = new Date()
+    record2.createdAt = new Date().toISOString()
     this.recordList && this.recordList.push(record2)
     //data存在再push东西因为data可能是undefined
     //可以等价写法为this.recordList?.push(record2)

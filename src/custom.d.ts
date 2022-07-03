@@ -1,9 +1,16 @@
+type RootState = {
+  recordList: RecordItem[]
+  tagList: Tag[]
+  currentTag?: Tag
+}
+
 type RecordItem = {
   tags: string[]
   notes: string
   type: string
   amount: number //数据类型
-  createdAt?: Date //Object的分类就叫类/构造函数,?表示createdAt不存在
+  createdAt?: string //Date由于JSON转化数据类型的不存在Date,所以在转化Date时候只能转出成string｜｜undefined显示在TS里面
+  //Object的分类就叫类/构造函数,?表示createdAt不存在
 }
 
 type Tag = {

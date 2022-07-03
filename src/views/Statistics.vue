@@ -8,13 +8,53 @@
       :value.sync="interval"
     />
     <!-- 就是靠:dataSource="array"把Prop关联起来的 -->
-    <div>
+    <!-- <div>
       type:{{ type }}
       <br />
       interval:{{ interval }}
+    </div> -->
+    <div>
+      <ol>
+        <li v-for="(group, index) in result" :key="index">
+          <h3 class="title">{{ group.title }}</h3>
+          <ol>
+            <li v-for="(item, id) in group.items" :key="id" class="record">
+              <!-- {{ item.amount }}
+              {{ item.createdAt }} -->
+              <!-- ground没有key只能给他定义一个index作为key，然后我的group还是一个数组，我要拿到它里面的数据还要遍历一次 -->
+              <span>{{ tagString(item.tags) }}</span>
+              <span class="notes">{{ item.notes }}</span>
+              <span>¥{{ item.amount }}</span>
+            </li>
+          </ol>
+        </li>
+      </ol>
     </div>
   </Layout>
 </template>
+
+<style lang="scss">
+%item {
+  padding: 8px 16px; //上下0左右16
+  /* min-height: 40px; 不用这个来表示高度8x2+24*/
+  line-height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-content: center; //这三步是为了他们居中
+}
+.title {
+  @extend %item;
+}
+.record {
+  background: white;
+  @extend %item; //继承里面的属性
+}
+.notes {
+  margin-right: auto;
+  margin-left: 16px;
+  color: #999;
+}
+</style>
 
 <script lang="ts">
 import intervalList from '@/constants/intervalList'
@@ -26,6 +66,31 @@ import Tabs from '../components/Tabs.vue'
 
 @Component({ components: { Tabs } })
 export default class Statistics extends Vue {
+  tagString(tags: Tag[]) {
+    return tags.length === 0 ? '无' : tags.join(',')
+  }
+  get recordList() {
+    return (this.$store.state as RootState).recordList
+  } //先拿到这个recordList//添加RootState所以将它放入全局，
+  get result() {
+    const { recordList } = this
+    // const hashTable: { [key: string]: RecordItem[] } = {} //很典型的如何声明一个空对象的类型
+    const hashTable: { [key: string]: { title: string; items: RecordItem[] } } =
+      {}
+    for (let i = 0; i < recordList.length; i++) {
+      const [date, time] = recordList[i].createdAt!.split('T')
+      console.log(date)
+      hashTable[date] = hashTable[date] || { title: date, items: [] } //这一步叫做初始化
+      hashTable[date].items.push(recordList[i])
+    }
+    console.log(hashTable)
+    return hashTable
+  } //再拿到这个结果
+
+  beforeCreate() {
+    this.$store.commit('fetchRecords')
+  } //我最开始就fetch就不会是空数据了而是我拿到的数据
+
   type = '-'
   interval = 'day'
   intervalList = intervalList

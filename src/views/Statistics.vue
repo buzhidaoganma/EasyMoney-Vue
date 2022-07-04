@@ -16,7 +16,9 @@
     <div>
       <ol>
         <li v-for="(group, index) in groupedList" :key="index">
-          <h3 class="title">{{ beautify(group.title) }}</h3>
+          <h3 class="title">
+            {{ beautify(group.title) }} <span>¥{{ group.total }}</span>
+          </h3>
           <ol>
             <li v-for="(item, id) in group.items" :key="id" class="record">
               <!-- {{ item.amount }}
@@ -113,15 +115,20 @@ export default class Statistics extends Vue {
     // type HashTableValue = { title: string; items: RecordItem[] }
     // const hashTable: { title: string; items: RecordItem[] }
     console.log(recordList.map((i) => i.createdAt))
-    const newList = clone(recordList).sort(
-      //clone里的每一项类型可以根据recordList推出来，sort里面的每一项也就可以推出来
-      (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
-    ) //sort就是把这个里面的项相减，valueOf就是取他们的number，但是有个问题sort之后recordList被修改了，所以先clone它再使用
+    const newList = clone(recordList)
+      .filter((r) => r.type === this.type)
+      .sort(
+        //clone里的每一项类型可以根据recordList推出来，sort里面的每一项也就可以推出来
+        (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
+      ) //sort就是把这个里面的项相减，valueOf就是取他们的number，但是有个问题sort之后recordList被修改了，所以先clone它再使用
 
     console.log(newList.map((i) => i.createdAt)) //map就是遍历这个数组项的东西
-    const result = [
+    type Result = { title: string; total?: number; items: RecordItem[] }[]
+    //为了加入一个总和重新定义了result的类型
+    const result: Result = [
       {
         title: dayjs(newList[0].createdAt).format('YYYY-MM-DD'),
+        // total: 0,前面一开始Result有说它不存在就可以不写了？
         items: [newList[0]],
       },
     ]
@@ -137,6 +144,9 @@ export default class Statistics extends Vue {
         })
       }
     }
+    result.map((group) => {
+      group.total = group.items.reduce((sum, item) => sum + item.amount, 0) //0是初始值
+    })
     console.log(result)
     return result
   } //再拿到这个结果

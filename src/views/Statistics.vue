@@ -2,11 +2,11 @@
   <Layout>
     <!-- <Types class-prefix="zzz" :value.sync="yyy" />可以直接用Tabs表示 -->
     <Tabs classPrefix="types" :dataSource="recordTypeList" :value.sync="type" />
-    <Tabs
+    <!-- <Tabs
       classPrefix="interval"
       :dataSource="intervalList"
       :value.sync="interval"
-    />
+    /> 这个没必要按周按月了-->
     <!-- 就是靠:dataSource="array"把Prop关联起来的 -->
     <!-- <div>
       type:{{ type }}
@@ -15,8 +15,8 @@
     </div> -->
     <div>
       <ol>
-        <li v-for="(group, index) in result" :key="index">
-          <h3 class="title">{{ group.title }}</h3>
+        <li v-for="(group, index) in groupedList" :key="index">
+          <h3 class="title">{{ beautify(group.title) }}</h3>
           <ol>
             <li v-for="(item, id) in group.items" :key="id" class="record">
               <!-- {{ item.amount }}
@@ -59,32 +59,86 @@
 <script lang="ts">
 import intervalList from '@/constants/intervalList'
 import recordTypeList from '@/constants/recordTypeList'
+import clone from '@/lib/clone'
+import dayjs from 'dayjs'
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 // import Types from '../components/Money_modules/Types.vue'
 import Tabs from '../components/Tabs.vue'
+
+const oneDay = 86400 * 1000
 
 @Component({ components: { Tabs } })
 export default class Statistics extends Vue {
   tagString(tags: Tag[]) {
     return tags.length === 0 ? '无' : tags.join(',')
   }
+
+  beautify(string: string) {
+    const day = dayjs(string)
+    const now = dayjs()
+    if (day.isSame(now, 'day')) {
+      return '今天'
+    } else if (day.isSame(now.subtract(1, 'day'), 'day')) {
+      return '昨天'
+    } else if (day.isSame(now.subtract(2, 'day'), 'day')) {
+      return '前天'
+    } else if (day.isSame(now, 'year')) {
+      return day.format('M月D日')
+    } else {
+      return day.format('YYYY年MM月D日')
+    }
+  }
+
   get recordList() {
     return (this.$store.state as RootState).recordList
   } //先拿到这个recordList//添加RootState所以将它放入全局，
-  get result() {
+  get groupedList() {
     const { recordList } = this
-    // const hashTable: { [key: string]: RecordItem[] } = {} //很典型的如何声明一个空对象的类型
-    const hashTable: { [key: string]: { title: string; items: RecordItem[] } } =
-      {}
-    for (let i = 0; i < recordList.length; i++) {
-      const [date, time] = recordList[i].createdAt!.split('T')
-      console.log(date)
-      hashTable[date] = hashTable[date] || { title: date, items: [] } //这一步叫做初始化
-      hashTable[date].items.push(recordList[i])
+    if (recordList.length === 0) {
+      return []
     }
-    console.log(hashTable)
-    return hashTable
+    // const hashTable: { [key: string]: RecordItem[] } = {} //很典型的如何声明一个空对象的类型
+    // const hashTable: { [key: string]: { title: string; items: RecordItem[] } } =
+    //   {}
+    // for (let i = 0; i < recordList.length; i++) {
+    //   const [date, time] = recordList[i].createdAt!.split('T')
+    //   console.log(date)
+    //   hashTable[date] = hashTable[date] || { title: date, items: [] } //这一步叫做初始化
+    //   hashTable[date].items.push(recordList[i])
+    // }
+    // console.log(hashTable)
+    // return hashTable
+    //把hashTable变成数组进行排序
+    // type HashTableValue = { title: string; items: RecordItem[] }
+    // const hashTable: { title: string; items: RecordItem[] }
+    console.log(recordList.map((i) => i.createdAt))
+    const newList = clone(recordList).sort(
+      //clone里的每一项类型可以根据recordList推出来，sort里面的每一项也就可以推出来
+      (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
+    ) //sort就是把这个里面的项相减，valueOf就是取他们的number，但是有个问题sort之后recordList被修改了，所以先clone它再使用
+
+    console.log(newList.map((i) => i.createdAt)) //map就是遍历这个数组项的东西
+    const result = [
+      {
+        title: dayjs(newList[0].createdAt).format('YYYY-MM-DD'),
+        items: [newList[0]],
+      },
+    ]
+    for (let i = 1; i < newList.length; i++) {
+      const current = newList[i]
+      const last = result[result.length - 1]
+      if (dayjs(last.title).isSame(dayjs(current.createdAt), 'day')) {
+        last.items.push(current)
+      } else {
+        result.push({
+          title: dayjs(current.createdAt).format('YYYY-MM-DD'),
+          items: [current],
+        })
+      }
+    }
+    console.log(result)
+    return result
   } //再拿到这个结果
 
   beforeCreate() {
@@ -100,9 +154,10 @@ export default class Statistics extends Vue {
 
 <style lang="scss" scoped>
 ::v-deep .types-tabs-item {
-  background: white;
+  background: #c4c4c4;
+
   &.selected {
-    background: #c4c4c4;
+    background: white;
     &::after {
       display: none; //去掉下划线
     }

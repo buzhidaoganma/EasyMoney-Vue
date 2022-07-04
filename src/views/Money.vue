@@ -109,7 +109,8 @@ export default class Money extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.layout-content {
+::v-deep .layout-content {
+  //scope和v-deep是搭配使用的
   display: flex;
   flex-direction: column-reverse; //直接调整div的位置
 }

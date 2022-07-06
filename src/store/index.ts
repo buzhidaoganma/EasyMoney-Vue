@@ -16,6 +16,7 @@ const localStorageKeyName = 'recordList'
 const store2 = new Vuex.Store({
   state: {
     recordList: [] as RecordItem[],
+    createRecordError: null,
     tagList: [] as Tag[],
     currentTag: undefined, //
     // //data
@@ -28,11 +29,12 @@ const store2 = new Vuex.Store({
       ) as RecordItem[]
       state.recordList = recordList //根据Vuex文档写返回值
     },
-    createRecord(state, record) {
-      const record2: RecordItem = clone(record)
+    createRecord(state, record: RecordItem) {
+      const record2 = clone(record)
       record2.createdAt = new Date().toISOString()
       state.recordList && state.recordList.push(record2) //state是肯定有的，所以可以省略判断
       store2.commit('saveRecords')
+      // window.alert('已保存')
       console.log(state.recordList)
       // recordStore.saveRecords()
     },
@@ -48,20 +50,27 @@ const store2 = new Vuex.Store({
     // }, //调用这个的时候不能直接用.需要用它封装好的API，store.commit('increment')
 
     fetchTags(state) {
-      const tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]')
-      return (state.tagList = tagList)
+      // const tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]')
+      // return (state.tagList = tagList)
+      state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]')
+      if (!state.tagList || state.tagList.length === 0) {
+        store2.commit('createTag', '衣')
+        store2.commit('createTag', '食')
+        store2.commit('createTag', '住')
+        store2.commit('createTag', '行')
+      }
     },
-    createTag(state, name: string) {
+    createTag(state, name) {
       const names = state.tagList.map((item) => item.name)
       if (names.indexOf(name) >= 0) {
         window.alert('标签名重复了')
         return 'duplicated'
       } else {
         const id = createId().toString()
-        state.tagList.push({ id, name: name })
+        state.tagList.push({ id: id, name: name })
         // state.saveTags()
         store2.commit('saveTags')
-        window.alert('添加成功')
+        // window.alert('添加成功')
         return 'success'
       }
     },

@@ -23,13 +23,14 @@ import TagHelper from '@/mixins/TagHelper'
 import Vue from 'vue'
 import { mixins } from 'vue-class-component'
 import { Component, Prop } from 'vue-property-decorator'
-@Component({
-  computed: {
-    tagList() {
-      return this.$store.state.tagList
-    },
-  },
-})
+@Component
+// ({
+//   computed: {
+//     tagList() {
+//       return this.$store.state.tagList
+//     },
+//   },
+// })
 export default class Tags extends mixins(TagHelper) {
   // @Prop({ required: true }) readonly tag!: string[]//| undefined //告诉Ts我的tags是字符串数组(string[])
   // //加readonly是为了说明不能直接更改外部的数据//去掉undefined,加！表明不能为空,加入{required:true}表明你必须给我传不传我就报错
@@ -38,9 +39,13 @@ export default class Tags extends mixins(TagHelper) {
   // tagList = store.fetchTags()把它放到computed里面了 //把原来Money.vue定义的tagList去掉了，在这里加
   selectedTags: string[] = []
 
+  get tagList() {
+    return this.$store.state.tagList //这个是为了及时更新获取的数据
+  }
+
   created() {
     this.$store.commit('fetchTags')
-  }
+  } //这里才是获取数据 跟前面的get tagList(){}对应
 
   toggle(tag: string) {
     const index = this.selectedTags.indexOf(tag)
@@ -48,6 +53,7 @@ export default class Tags extends mixins(TagHelper) {
       this.selectedTags.splice(index, 1)
     } else {
       this.selectedTags.push(tag)
+      console.log(this.selectedTags)
     }
     this.$emit('update:value', this.selectedTags)
   }

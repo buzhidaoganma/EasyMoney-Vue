@@ -10,10 +10,12 @@
       <FormItem
         fieldName="备注"
         placeholder="在这里输入备注"
+        :value="record.notes"
         @update:value="onUpdateNotes"
       />
     </div>
-    <Tags />
+    <!-- record.tags就等于你给我的$event的这个数组 -->
+    <Tags @update:value="record.tags = $event" />
     <!-- :dataSource.sync="tags"在Tags里面已经做好了传输所以不需要了-->
     <!-- @update:value="onUpdateTags"被换成add事件了 -->
   </Layout>
@@ -91,7 +93,15 @@ export default class Money extends Vue {
   }
 
   saveRecord() {
-    this.$store.commit('createRecord', this.record)
+    if (!this.record.tags || this.record.tags.length === 0) {
+      return window.alert('请至少选择一个标签')
+    } else {
+      this.$store.commit('createRecord', this.record)
+      if (this.$store.state.createRecordError === null) {
+        window.alert('已保存')
+        this.record.notes = ''
+      }
+    }
     // store.createRecord(this.record)
     // // const record2: RecordItem = recordListModel.clone(this.record)
     // // record2.createdAt = new Date()

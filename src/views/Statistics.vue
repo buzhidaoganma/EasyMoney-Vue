@@ -13,25 +13,24 @@
       <br />
       interval:{{ interval }}
     </div> -->
-    <div>
-      <ol>
-        <li v-for="(group, index) in groupedList" :key="index">
-          <h3 class="title">
-            {{ beautify(group.title) }} <span>¥{{ group.total }}</span>
-          </h3>
-          <ol>
-            <li v-for="(item, id) in group.items" :key="id" class="record">
-              <!-- {{ item.amount }}
+    <ol v-if="groupedList.length > 0">
+      <li v-for="(group, index) in groupedList" :key="index">
+        <h3 class="title">
+          {{ beautify(group.title) }} <span>¥{{ group.total }}</span>
+        </h3>
+        <ol>
+          <li v-for="(item, id) in group.items" :key="id" class="record">
+            <!-- {{ item.amount }}
               {{ item.createdAt }} -->
-              <!-- ground没有key只能给他定义一个index作为key，然后我的group还是一个数组，我要拿到它里面的数据还要遍历一次 -->
-              <span>{{ tagString(item.tags) }}</span>
-              <span class="notes">{{ item.notes }}</span>
-              <span>¥{{ item.amount }}</span>
-            </li>
-          </ol>
-        </li>
-      </ol>
-    </div>
+            <!-- ground没有key只能给他定义一个index作为key，然后我的group还是一个数组，我要拿到它里面的数据还要遍历一次 -->
+            <span>{{ tagString(item.tags) }}</span>
+            <span class="notes">{{ item.notes }}</span>
+            <span>¥{{ item.amount }}</span>
+          </li>
+        </ol>
+      </li>
+    </ol>
+    <div v-else class="noResult">目前没有相关记录</div>
   </Layout>
 </template>
 
@@ -73,6 +72,9 @@ const oneDay = 86400 * 1000
 @Component({ components: { Tabs } })
 export default class Statistics extends Vue {
   tagString(tags: Tag[]) {
+    console.log(tags)
+    console.log(tags[0])
+    console.log(tags.map((t) => t.name))
     return tags.length === 0 ? '无' : tags.join(',')
   }
 
@@ -97,9 +99,9 @@ export default class Statistics extends Vue {
   } //先拿到这个recordList//添加RootState所以将它放入全局，
   get groupedList() {
     const { recordList } = this
-    if (recordList.length === 0) {
-      return []
-    }
+    // if (recordList.length === 0) {
+    //   return [] as Result //这个as 不加也不会报错，以后遇到bug记得加
+    // }
     // const hashTable: { [key: string]: RecordItem[] } = {} //很典型的如何声明一个空对象的类型
     // const hashTable: { [key: string]: { title: string; items: RecordItem[] } } =
     //   {}
@@ -121,6 +123,10 @@ export default class Statistics extends Vue {
         //clone里的每一项类型可以根据recordList推出来，sort里面的每一项也就可以推出来
         (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf(),
       ) //sort就是把这个里面的项相减，valueOf就是取他们的number，但是有个问题sort之后recordList被修改了，所以先clone它再使用
+
+    if (newList.length === 0) {
+      return [] as Result //这个as 不加也不会报错，以后遇到bug记得加
+    }
 
     console.log(newList.map((i) => i.createdAt)) //map就是遍历这个数组项的东西
     type Result = { title: string; total?: number; items: RecordItem[] }[]
@@ -163,6 +169,10 @@ export default class Statistics extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.noResult {
+  padding: 16px;
+  text-align: center;
+}
 ::v-deep .types-tabs-item {
   background: #c4c4c4;
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="app">
+  <div id="app">
     <router-view />
     <!-- 告诉他把内容显示在这里面 -->
   </div>
@@ -22,12 +22,11 @@ body {
   display: block;
   clear: both;
 } 教另外的写法*/
-@media (max-width: 500px) {
-  //媒体查询
+/* @media (max-width: 500px) {
+  //媒体查询 */
 
-  .app {
-    max-width: 500px;
-    margin: 0 auto;
-  }
+#app {
+  max-width: 500px;
+  margin: 0 auto;
 }
 </style>

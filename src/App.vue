@@ -22,4 +22,12 @@ body {
   display: block;
   clear: both;
 } 教另外的写法*/
+@media (max-width: 500px) {
+  //媒体查询
+
+  .app {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
 </style>
